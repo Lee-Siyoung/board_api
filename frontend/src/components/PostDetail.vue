@@ -68,7 +68,7 @@ export default {
     },
   },
   created() {
-    this.fetchPost(); // PostDetail 컴포넌트가 생성될 때 데이터를 가져오도록 합니다.
+    this.fetchPost(); // PostDetail 컴포넌트가 생성될 때 데이터를 가져옴
   },
 };
 </script>
@@ -111,7 +111,7 @@ export default {
 }
 
 .edit-textarea {
-  height: 400px; /* 텍스트 입력 필드의 높이를 조절합니다. */
+  height: 400px;
 }
 
 .post-detail button {

@@ -2,6 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const port = 3000;
+const multer = require("multer"); // 파일 업로드를 처리하기 위한 미들웨어
+const path = require("path");
+const fs = require("fs");
 
 app.use(bodyParser.json());
 
@@ -194,6 +197,40 @@ app.delete("/boards/:boardId/post/:postId", (req, res) => {
   board.posts.splice(postIndex, 1);
 
   res.json({ message: "Post deleted successfully" });
+});
+
+// --- 파일 api
+
+// 업로드된 파일을 저장할 디렉토리 설정
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// Multer 설정
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // 업로드된 파일의 원래 이름을 사용하거나 고유한 이름을 생성할 수 있습니다.
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// 파일 업로드 핸들러
+app.post("/upload", upload.single("file"), (req, res) => {
+  // 업로드된 파일 정보는 req.file에서 확인할 수 있습니다.
+  if (!req.file) {
+    return res.status(400).send("파일을 업로드하지 못했습니다.");
+  }
+
+  console.log("파일 업로드 성공:", req.file);
+
+  // 파일 업로드 성공 시 응답
+  res.status(200).json({ message: "파일 업로드 성공" });
 });
 
 app.listen(port, () => {

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import BoardDetail from "../components/BoardDetail.vue";
 import BoardList from "../components/BoardList.vue";
 import PostDetail from "../components/PostDetail.vue";
+import PostCreate from "@/components/PostCreate.vue";
 const routes = [
   {
     path: "/",
@@ -12,6 +13,12 @@ const routes = [
     path: "/boards/:boardId",
     name: "BoardDetail",
     component: BoardDetail,
+    props: true,
+  },
+  {
+    path: "/boards/:boardId/post",
+    name: "PostCreate",
+    component: PostCreate,
     props: true,
   },
   {

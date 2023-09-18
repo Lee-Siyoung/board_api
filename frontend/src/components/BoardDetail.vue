@@ -4,7 +4,7 @@
       <h1>게시판 목록</h1>
       <!-- 게시판 이름을 입력할 폼 필드 -->
       <input v-model="newBoardName" type="text" placeholder="게시판 이름" />
-      <button @click="createBoard">게시판 생성</button>
+      <button v-on:click="createBoard">게시판 생성</button>
       <ul>
         <li v-for="board in boards" :key="board.id">
           <div v-if="!board.isEditing">
@@ -12,8 +12,8 @@
               board.name
             }}</router-link>
             <div class="button-group">
-              <button @click="startEditing(board)">수정</button>
-              <button @click="deleteBoard(board.id)">삭제</button>
+              <button v-on:click="startEditing(board)">수정</button>
+              <button v-on:click="deleteBoard(board.id)">삭제</button>
             </div>
           </div>
           <div v-else>
@@ -22,31 +22,25 @@
               type="text"
               placeholder="수정된 게시판 이름"
             />
-            <button @click="saveEdit(board)">저장</button>
+            <button v-on:click="saveEdit(board)">저장</button>
           </div>
         </li>
       </ul>
     </div>
     <div class="post-list">
-      <h2>{{ board.name }} 게시판</h2>
+      <h2>{{ board.name }}</h2>
+      <router-link :to="'/boards/' + board.id + '/post'" v-slot="{ navigate }">
+        <button v-on:click="navigate" role="link">포스트 생성</button>
+      </router-link>
       <ul>
         <li v-for="post in board.posts" :key="post.id">
           <router-link :to="'/boards/' + board.id + '/post/' + post.id">{{
             post.name
           }}</router-link>
           (조회수: {{ post.check }})
-          <button @click="deletePost(post.id)">삭제</button>
+          <button v-on:click="deletePost(post.id)">삭제</button>
         </li>
       </ul>
-    </div>
-    <!-- 포스트 생성 폼 -->
-    <div class="post-create">
-      <input v-model="newPostName" type="text" placeholder="포스트 이름" />
-      <button @click="createPost">포스트 생성</button>
-      <textarea
-        v-model="newPostDetail"
-        placeholder="포스트 상세 내용"
-      ></textarea>
     </div>
   </div>
 </template>
@@ -62,25 +56,10 @@ export default {
         posts: [],
       },
       newBoardName: "",
-      newPostName: "",
-      newPostDetail: "",
     };
   },
   methods: {
-    async createPost() {
-      try {
-        const boardId = this.$route.params.boardId;
-        const response = await axios.post(`/boards/${boardId}/post`, {
-          name: this.newPostName,
-          detail: this.newPostDetail,
-        });
-        this.board.posts.push(response.data);
-        this.newPostName = "";
-        this.newPostDetail = "";
-      } catch (error) {
-        console.error("Error creating post:", error);
-      }
-    },
+    async createPost() {},
     async deletePost(postId) {
       try {
         const boardId = this.$route.params.boardId;
@@ -100,7 +79,7 @@ export default {
         });
         this.newBoardName = "";
 
-        // 게시판을 생성한 후에 목록을 업데이트합니다.
+        // 게시판을 생성한 후에 목록을 업데이트
         await this.fetchBoards();
       } catch (error) {
         console.error("Error creating board:", error);
@@ -108,10 +87,10 @@ export default {
     },
     async deleteBoard(boardId) {
       try {
-        // 게시판 삭제 요청을 서버로 보냅니다.
+        // 게시판 삭제 요청을 서버로 보냄
         await axios.delete(`/boards/${boardId}`);
 
-        // 삭제가 성공하면 화면에서 해당 게시판을 제거합니다.
+        // 삭제가 성공하면 화면에서 해당 게시판을 제거
         this.boards = this.boards.filter((board) => board.id !== boardId);
       } catch (error) {
         console.error("Error deleting board:", error);
@@ -136,7 +115,6 @@ export default {
         console.error("Error saving board edit:", error);
       }
     },
-
     async fetchBoard() {
       // 게시판 정보를 가져오는 메서드
       try {
@@ -169,22 +147,4 @@ export default {
 };
 </script>
 
-<style>
-.post-create {
-  flex: 3;
-  padding: 20px;
-  border: 1px solid #000000;
-  height: 100vh;
-  width: 50px;
-}
-.input[type="text"],
-.post-create textarea {
-  width: 80%;
-  padding: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #000000;
-  border-radius: 4px;
-  height: 70vh;
-}
-</style>
+<style></style>

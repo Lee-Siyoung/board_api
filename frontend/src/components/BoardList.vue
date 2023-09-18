@@ -27,10 +27,6 @@
         </li>
       </ul>
     </div>
-    <div class="post-list">
-      <h1>포스트 목록</h1>
-      <router-view></router-view>
-    </div>
   </div>
 </template>
 
@@ -68,7 +64,7 @@ export default {
       // 삭제 버튼 클릭 시 실행될 함수
       try {
         await axios.delete(`/boards/${boardId}`);
-        // 삭제 요청이 성공한 경우, 해당 게시판을 목록에서 제거합니다.
+        // 삭제 요청이 성공한 경우, 해당 게시판을 목록에서 제거
         this.boards = this.boards.filter((board) => board.id !== boardId);
       } catch (error) {
         console.error("Error deleting board:", error);
@@ -101,7 +97,6 @@ export default {
 </script>
 
 <style>
-/* 전체 앱 스타일 */
 .app {
   display: flex;
   justify-content: space-between;
@@ -109,7 +104,6 @@ export default {
   padding: 20px;
 }
 
-/* 게시판 목록 스타일 */
 .board-list {
   flex: 1;
   max-width: 250px;
@@ -118,7 +112,7 @@ export default {
   border: 1px solid #000000;
   padding: 20px;
   margin-right: 20px;
-  background-color: #f0f0f0; /* 배경색 추가 */
+  background-color: #f0f0f0;
 }
 
 .board-list h1 {
@@ -143,7 +137,6 @@ export default {
   color: #000000;
 }
 
-/* 포스트 목록 스타일 */
 .post-list {
   flex: 1;
   padding: 20px;
