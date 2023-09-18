@@ -7,10 +7,23 @@
       <button @click="createBoard">게시판 생성</button>
       <ul>
         <li v-for="board in boards" :key="board.id">
-          <router-link :to="'/boards/' + board.id">{{
-            board.name
-          }}</router-link>
-          <button @click="deleteBoard(board.id)">삭제</button>
+          <div v-if="!board.isEditing">
+            <router-link :to="'/boards/' + board.id">{{
+              board.name
+            }}</router-link>
+            <div class="button-group">
+              <button @click="startEditing(board)">수정</button>
+              <button @click="deleteBoard(board.id)">삭제</button>
+            </div>
+          </div>
+          <div v-else>
+            <input
+              v-model="board.editedName"
+              type="text"
+              placeholder="수정된 게시판 이름"
+            />
+            <button @click="saveEdit(board)">저장</button>
+          </div>
         </li>
       </ul>
     </div>
@@ -102,6 +115,25 @@ export default {
         this.boards = this.boards.filter((board) => board.id !== boardId);
       } catch (error) {
         console.error("Error deleting board:", error);
+      }
+    },
+    startEditing(board) {
+      // 게시판 수정 시작
+      board.isEditing = true;
+      board.editedName = board.name; // 수정 전 게시판 이름 저장
+    },
+    async saveEdit(board) {
+      try {
+        // 서버에 수정된 게시판 정보 업데이트 요청 보내기
+        await axios.put(`/boards/${board.id}`, {
+          name: board.editedName,
+        });
+
+        // 수정 후 입력 필드 숨기고 수정된 이름으로 업데이트
+        board.name = board.editedName;
+        board.isEditing = false;
+      } catch (error) {
+        console.error("Error saving board edit:", error);
       }
     },
 
