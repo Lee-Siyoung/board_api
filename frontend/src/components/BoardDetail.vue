@@ -17,16 +17,6 @@
     </div>
     <div class="post-list">
       <h2>{{ board.name }} 게시판</h2>
-      <!-- 게시물 생성 폼 -->
-      <div>
-        <input v-model="newPostName" type="text" placeholder="게시물 이름" />
-        <input
-          v-model="newPostDetail"
-          type="text"
-          placeholder="게시물 상세 내용"
-        />
-        <button @click="createPost">게시물 생성</button>
-      </div>
       <ul>
         <li v-for="post in board.posts" :key="post.id">
           <router-link :to="'/boards/' + board.id + '/post/' + post.id">{{
@@ -36,6 +26,15 @@
           <button @click="deletePost(post.id)">삭제</button>
         </li>
       </ul>
+    </div>
+    <!-- 포스트 생성 폼 -->
+    <div class="post-create">
+      <input v-model="newPostName" type="text" placeholder="포스트 이름" />
+      <button @click="createPost">포스트 생성</button>
+      <textarea
+        v-model="newPostDetail"
+        placeholder="포스트 상세 내용"
+      ></textarea>
     </div>
   </div>
 </template>
@@ -138,3 +137,48 @@ export default {
   },
 };
 </script>
+
+<style>
+.post-create {
+  flex: 3;
+  padding: 20px;
+  border: 1px solid #000000;
+  height: 100vh;
+  width: 50px;
+}
+
+.post-create input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.post-create textarea {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  height: 70vh;
+  resize: vertical; /* 자동 줄바꿈을 위해 수직 크기 조절을 활성화 */
+  vertical-align: top; /* 텍스트를 오른쪽 맨 위에 위치 */
+}
+
+.post-create button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.post-create button:hover {
+  background-color: #0056b3;
+}
+</style>

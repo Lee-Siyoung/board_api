@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="post-detail">
     <h2>{{ post.name }} 상세 내용</h2>
     <p>{{ post.detail }}</p>
   </div>
@@ -31,3 +31,25 @@ export default {
   },
 };
 </script>
+
+<style>
+.post-detail {
+  width: 600px;
+  height: 80vh;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-detail h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.post-detail p {
+  font-size: 16px;
+}
+</style>
