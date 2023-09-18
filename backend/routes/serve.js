@@ -32,7 +32,6 @@ app.post("/boards", (req, res) => {
     id: nextBoardId,
     name,
     posts: [],
-    check: 0,
   };
   if (!name || checknum !== 1) {
     return res
@@ -56,7 +55,6 @@ app.get("/boards/:boardId", (req, res) => {
   if (!board) {
     return res.status(404).json({ message: "Board not found" });
   }
-  board.check += 1;
   res.json(board);
 });
 

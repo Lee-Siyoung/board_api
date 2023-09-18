@@ -10,7 +10,6 @@
           <router-link :to="'/boards/' + board.id">{{
             board.name
           }}</router-link>
-          (조회수: {{ board.check }})
           <button @click="deleteBoard(board.id)">삭제</button>
           <!-- 삭제 버튼 추가 -->
         </li>
@@ -71,12 +70,15 @@ export default {
 </script>
 
 <style>
+/* 전체 앱 스타일 */
 .app {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   padding: 20px;
 }
+
+/* 게시판 목록 스타일 */
 .board-list {
   flex: 1;
   max-width: 250px;
@@ -85,11 +87,86 @@ export default {
   border: 1px solid #000000;
   padding: 20px;
   margin-right: 20px;
+  background-color: #f0f0f0; /* 배경색 추가 */
 }
+
+.board-list h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.board-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.board-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.board-list a {
+  text-decoration: none;
+  color: #000000;
+}
+
+.board-list button {
+  background-color: #696df2;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* 포스트 목록 스타일 */
 .post-list {
   flex: 1;
   padding: 20px;
   border: 1px solid #000000;
   height: 100vh;
+  background-color: #ffffff; /* 배경색 추가 */
+}
+
+.post-list h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.post-create button {
+  background-color: #696df2;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.post-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.post-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.post-list a {
+  text-decoration: none;
+  color: #000000;
+}
+
+.board-list button:hover,
+.post-create button:hover,
+.post-list button {
+  background-color: #696df2;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: #494ddf;
 }
 </style>

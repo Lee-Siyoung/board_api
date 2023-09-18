@@ -10,7 +10,6 @@
           <router-link :to="'/boards/' + board.id">{{
             board.name
           }}</router-link>
-          (조회수: {{ board.check }})
           <button @click="deleteBoard(board.id)">삭제</button>
         </li>
       </ul>
@@ -146,39 +145,13 @@ export default {
   height: 100vh;
   width: 50px;
 }
-
-.post-create input[type="text"] {
-  width: 80%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
+.input[type="text"],
 .post-create textarea {
   width: 80%;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+  border: 1px solid #000000;
+  border-radius: 4px;
   height: 70vh;
-  resize: vertical; /* 자동 줄바꿈을 위해 수직 크기 조절을 활성화 */
-  vertical-align: top; /* 텍스트를 오른쪽 맨 위에 위치 */
-}
-
-.post-create button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.post-create button:hover {
-  background-color: #0056b3;
 }
 </style>
