@@ -149,6 +149,7 @@ export default {
 .post-create textarea {
   width: 80%;
   padding: 10px;
+  margin-top: 10px;
   margin-bottom: 10px;
   border: 1px solid #000000;
   border-radius: 4px;
