@@ -5,6 +5,7 @@ module.exports = defineConfig({
       "/": {
         target: "http://localhost:3000/",
         changeOrigin: true,
+        ws: false, // websocket 오류 임시방편
         pathRewrite: {
           "^/": "",
         },

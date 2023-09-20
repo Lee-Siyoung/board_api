@@ -3,10 +3,14 @@
     <div class="board-list">
       <h1>게시판 목록</h1>
       <!-- 게시판 이름을 입력할 폼 필드 -->
-      <input v-model="newBoardName" type="text" placeholder="게시판 이름" />
+      <input
+        v-model="state.newBoardName"
+        type="text"
+        placeholder="게시판 이름"
+      />
       <button @click="createBoard">게시판 생성</button>
       <ul>
-        <li v-for="board in boards" :key="board.id">
+        <li v-for="board in state.boards" :key="board.id">
           <div v-if="!board.isEditing">
             <router-link :to="'/boards/' + board.id">{{
               board.name
@@ -31,67 +35,83 @@
 </template>
 
 <script>
+import { onMounted, reactive } from "vue";
 import axios from "axios";
 
 export default {
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       boards: [],
-      newBoardName: "", // 추가: 게시판 이름을 저장할 데이터
-    };
-  },
-  methods: {
-    async fetchBoards() {
-      try {
-        const response = await axios.get("/boards");
-        this.boards = response.data;
-      } catch (error) {
-        console.error("Error fetching boards:", error);
-      }
-    },
-    async createBoard() {
-      try {
-        const response = await axios.post("/boards", {
-          name: this.newBoardName,
-        }); // 게시판 이름을 보내기
-        this.boards.push(response.data);
-        this.newBoardName = ""; // 입력 필드 초기화
-      } catch (error) {
-        console.error("Error creating board:", error);
-      }
-    },
-    async deleteBoard(boardId) {
-      // 삭제 버튼 클릭 시 실행될 함수
-      try {
-        await axios.delete(`/boards/${boardId}`);
-        // 삭제 요청이 성공한 경우, 해당 게시판을 목록에서 제거
-        this.boards = this.boards.filter((board) => board.id !== boardId);
-      } catch (error) {
-        console.error("Error deleting board:", error);
-      }
-    },
-    startEditing(board) {
-      // 게시판 수정 시작
-      board.isEditing = true;
-      board.editedName = board.name; // 수정 전 게시판 이름 저장
-    },
-    async saveEdit(board) {
-      try {
-        // 서버에 수정된 게시판 정보 업데이트 요청 보내기
-        await axios.put(`/boards/${board.id}`, {
-          name: board.editedName,
-        });
+      newBoardName: "",
+    });
 
-        // 수정 후 입력 필드 숨기고 수정된 이름으로 업데이트
-        board.name = board.editedName;
-        board.isEditing = false;
-      } catch (error) {
-        console.error("Error saving board edit:", error);
-      }
-    },
-  },
-  mounted() {
-    this.fetchBoards();
+    const fetchBoards = async () => {
+      await axios
+        .get("/boards")
+        .then((res) => {
+          state.boards = res.data;
+        })
+        .catch((error) => {
+          console.error("Error fetching boards:", error);
+        });
+    };
+
+    const createBoard = async () => {
+      await axios
+        .post("/boards", {
+          name: state.newBoardName,
+        })
+        .then((res) => {
+          state.boards.push(res.data);
+          state.newBoardName = "";
+        })
+        .catch((error) => {
+          console.error("Error creating board:", error);
+          console.log(state.boards);
+        });
+    };
+
+    const deleteBoard = async (boardId) => {
+      await axios
+        .delete(`/boards/${boardId}`)
+        .then(() => {
+          state.boards = state.boards.filter((board) => board.id !== boardId);
+        })
+        .catch((error) => {
+          console.error("Error deleting board:", error);
+        });
+    };
+
+    const startEditing = (board) => {
+      board.isEditing = true;
+      board.editedName = board.name;
+    };
+
+    const saveEdit = async (board) => {
+      await axios
+        .put(`/boards/${board.id}`, {
+          name: board.editedName,
+        })
+        .then(() => {
+          board.name = board.editedName;
+          board.isEditing = false;
+        })
+        .catch((error) => {
+          console.error("Error saving board edit:", error);
+        });
+    };
+
+    onMounted(() => {
+      fetchBoards();
+    });
+
+    return {
+      state,
+      createBoard,
+      deleteBoard,
+      startEditing,
+      saveEdit,
+    };
   },
 };
 </script>
