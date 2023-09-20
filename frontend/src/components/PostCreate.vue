@@ -1,12 +1,21 @@
 <template>
   <div class="post-create">
     <h2>포스트 생성</h2>
-    <input v-model="state.newPostName" type="text" placeholder="포스트 제목" />
+    <input
+      class="name"
+      v-model="state.newPostName"
+      type="text"
+      placeholder="포스트 제목"
+    />
     <textarea
+      class="detail"
       v-model="state.newPostDetail"
       placeholder="포스트 내용"
     ></textarea>
-    <button @click="createPost">포스트 생성</button>
+    <div class="button-container">
+      <button @click="createPost" class="create-button">생성</button>
+      <button @click="backContent" class="cancel-button">취소</button>
+    </div>
   </div>
 </template>
 
@@ -45,7 +54,12 @@ export default {
         });
     };
 
+    const backContent = () => {
+      router.go(-1);
+    };
+
     return {
+      backContent,
       createPost,
       state,
     };
@@ -53,4 +67,34 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.post-create {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+.detail,
+.name {
+  width: 96%;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  resize: vertical;
+}
+
+.detail {
+  height: 400px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+</style>

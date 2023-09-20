@@ -16,9 +16,10 @@
       ></textarea>
     </div>
     <div v-if="!state.isEditing">
-      <button @click="startEditing">수정</button>
-      <div class="button"></div>
-      <button @click="deletePost">삭제</button>
+      <div class="button-container">
+        <button @click="startEditing">수정</button>
+        <button @click="deletePost">삭제</button>
+      </div>
     </div>
     <div v-else>
       <button @click="saveEdit">저장</button>
@@ -155,10 +156,5 @@ export default {
 
 .post-detail button {
   padding: 10px 20px;
-}
-
-.button {
-  width: 10px; /* 원하는 간격 크기를 지정하세요. */
-  display: inline-block; /* div 요소가 가로로 나란히 표시되도록 설정합니다. */
 }
 </style>
