@@ -1,7 +1,7 @@
 <template>
   <div class="post-detail">
-    <h2>{{ state.post.name }} 상세 내용</h2>
-    <p class="detail" v-if="!state.isEditing">{{ state.post.detail }}</p>
+    <h2>{{ state.posts.name }} 상세 내용</h2>
+    <p class="detail" v-if="!state.isEditing">{{ state.posts.detail }}</p>
     <div v-else>
       <input
         class="edit-input"
@@ -15,21 +15,28 @@
         placeholder="포스트 상세 내용"
       ></textarea>
     </div>
-    <button v-if="!state.isEditing" @click="startEditing">수정</button>
-    <button v-else @click="saveEdit">저장</button>
+    <div v-if="!state.isEditing">
+      <button @click="startEditing">수정</button>
+      <div class="button"></div>
+      <button @click="deletePost">삭제</button>
+    </div>
+    <div v-else>
+      <button @click="saveEdit">저장</button>
+    </div>
   </div>
 </template>
 
 <script>
 import { reactive, onMounted } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const state = reactive({
-      post: {
+      posts: {
         name: "",
         detail: "",
       },
@@ -44,8 +51,8 @@ export default {
       await axios
         .get(`/boards/${boardId}/post/${postId}`)
         .then((res) => {
-          state.post.name = res.data.name;
-          state.post.detail = res.data.detail;
+          state.posts.name = res.data.name;
+          state.posts.detail = res.data.detail;
         })
         .catch((error) => {
           console.error("Error fetching post:", error);
@@ -55,8 +62,8 @@ export default {
     const startEditing = () => {
       // 수정 모드 시작
       state.isEditing = true;
-      state.editedName = state.post.name;
-      state.editedDetail = state.post.detail;
+      state.editedName = state.posts.name;
+      state.editedDetail = state.posts.detail;
     };
 
     const saveEdit = async () => {
@@ -69,12 +76,25 @@ export default {
           detail: state.editedDetail,
         })
         .then(() => {
-          state.post.name = state.editedName;
-          state.post.detail = state.editedDetail;
+          state.posts.name = state.editedName;
+          state.posts.detail = state.editedDetail;
           state.isEditing = false;
         })
         .catch((error) => {
           console.error("Error saving edit:", error);
+        });
+    };
+
+    const deletePost = async () => {
+      const boardId = route.params.boardId;
+      const postId = route.params.postId;
+      await axios
+        .delete(`/boards/${boardId}/post/${postId}`)
+        .then(() => {
+          router.go(-1);
+        })
+        .catch((error) => {
+          console.error("Error deleting post:", error);
         });
     };
 
@@ -85,6 +105,7 @@ export default {
     return {
       startEditing,
       saveEdit,
+      deletePost,
       state,
     };
   },
@@ -133,10 +154,11 @@ export default {
 }
 
 .post-detail button {
-  background-color: #696df2;
-  color: #ffffff;
-  border: none;
   padding: 10px 20px;
-  cursor: pointer;
+}
+
+.button {
+  width: 10px; /* 원하는 간격 크기를 지정하세요. */
+  display: inline-block; /* div 요소가 가로로 나란히 표시되도록 설정합니다. */
 }
 </style>
