@@ -3,7 +3,13 @@ import BoardDetail from "../components/BoardDetail.vue";
 import BoardList from "../components/BoardList.vue";
 import PostDetail from "../components/PostDetail.vue";
 import PostCreate from "@/components/PostCreate.vue";
+import NotFound from "@/components/NotFound.vue";
+
 const routes = [
+  {
+    path: "/:catchAll(.*)",
+    component: NotFound,
+  },
   {
     path: "/",
     name: "Boards",
